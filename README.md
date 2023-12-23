@@ -1,6 +1,6 @@
 # PYNQ 3.0.1 for retaired Digilent Zybo  (2023 update)
 
-This repo provides an attempt to port PYNQ for the old Zybo board. Unlike [1], this implementation provides a newer image v3.0.1 and the correct ethernet MAC address. I attempted to add complementary remarks and thoughts regarding installation of Xilinx tools on headless (i.e using a text-mode terminal only) Linux-based machine. 
+This repo provides an attempt to port PYNQ for the old Zybo board. Unlike other tutorials, this implementation provides a newer image v3.0.1 and the correct ethernet MAC address. I attempted to add complementary remarks and thoughts regarding installation of Xilinx tools on headless (i.e using a text-mode terminal only) Linux-based machine. 
 
 ## Requrements
 
