@@ -139,14 +139,14 @@ $ make
 
 ```bash
 $ cd ${HOME}/git-projects/PYNQ
-$ time make BOARDDIR=${HOME}/git-projects/pynq-zybo BOARDS=Zybo
+$ time make BOARDDIR=${HOME}/git-projects/PYNQ-ZYBO BOARDS=Zybo
 ```
 
 Successful build requires approximately 40 minutes with pre-existing dependencies on an 8-core machine.
 
 Usefull command if you plan to rebuild just kernel (approx 10 min):
 ```bash
-$ time make boot_files BOARDDIR=${HOME}/git-projects/pynq-zybo BOARDS=Zybo
+$ time make boot_files BOARDDIR=${HOME}/git-projects/PYNQ-ZYBO BOARDS=Zybo
 ```
 
 9. Flash SD card according manual https://pynq.readthedocs.io/en/v3.0.0/appendix/sdcard.html#writing-the-sd-card
@@ -166,7 +166,7 @@ I have decided to repack `BOOT.BIN` as my current solution.
 ```bash
 $ mkdir ${HOME}/git-projects/boot
 $ cd ${HOME}/git-projects/boot
-$ cp /home/zxdx/git-projects/PYNQ/sdbuild/build/Zybo/petalinux_project/images/linux/bootgen.bif .
+$ cp ${HOME}/git-projects/PYNQ/sdbuild/build/Zybo/petalinux_project/images/linux/bootgen.bif .
 ```
 Add bitstream to `bootgen.bif`, put *absolute path* to your files:
 
