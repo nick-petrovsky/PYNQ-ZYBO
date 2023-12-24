@@ -7,6 +7,12 @@ This repo provides an attempt to port PYNQ for the old Zybo board. Unlike other 
 * A ubuntu 20.04 machine or VM.
 * A storage partition with at least 300 GB of available data space.
 
+## Prebuild image
+
+* https://file.io/YNyE8RCsOTxM
+
+Fixed BOOT.BIN for bistream load at boot, patched /lib/systemd/system/haveged.service
+  
 ## Install & build
 
 0. Install fresh VM with Ubuntu 20.04 server
@@ -213,6 +219,15 @@ It can't find the reason why PL have to be unconfigured while FPGA MANAGER is en
 DAEMON_ARGS="-w 1024 -d16"
 ```
 
+Patch following options in systemd file `/lib/systemd/system/haveged.service`
+
+```bash
+-SystemCallFilter=@basic-io @file-system @io-event @network-io @signal
+-SystemCallFilter=arch_prctl brk ioctl mprotect sysinfo
++SystemCallFilter=@system-service
++SystemCallFilter=~@mount
++SystemCallErrorNumber=EPERM
+```
 
 References:
 [1] - https://discuss.pynq.io/t/pynq-2-7-for-zybo-z7/4124
