@@ -9,9 +9,13 @@ This repo provides an attempt to port PYNQ for the old Zybo board. Unlike other 
 
 ## Prebuild image
 
-* https://file.io/YNyE8RCsOTxM
+[Lastest release](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/tag/v0.1.0)
 
-Fixed BOOT.BIN for bistream load at boot, patched /lib/systemd/system/haveged.service
+The image is compressed with ZX archive. [BalenaEtcher](https://balenaetcher.org/) can be used for direct SD flashing without unpacking.
+
+* Fixed volatile ethernet MAC (base bitstream is flashed on boot)
+* Fixed HAVAGE daemon systemd service file (/lib/systemd/system/haveged.service)
+* Simple Device tree with MIO btns and leds
   
 ## Install & build
 
