@@ -148,7 +148,7 @@ $ make
 ```
 
 ```bash
-$ cd ${HOME}/git-projects/PYNQ
+$ cd ${HOME}/git-projects/PYNQ/sdbuild/
 $ time make BOARDDIR=${HOME}/git-projects/PYNQ-ZYBO BOARDS=Zybo
 ```
 
@@ -165,9 +165,9 @@ $ time make boot_files BOARDDIR=${HOME}/git-projects/PYNQ-ZYBO BOARDS=Zybo
 $ ls -lah ${HOME}/git-projects/PYNQ/sdbuild/output/Zybo-3.0.1.img
 ```
 
-10. [Optional] Volatile ethernet MAC address
+10. [Optional] Volatile ethernet MAC address (only for *old* Zybo board, for Zybo-Z7-10 and Zybo-Z7-20 you should avoid this step)
 
-Zybo board requires I2C0 wires through PL for EEPROM access (ethernet MAC and audio codec ssm2603 control). That's why PL have to be configured during boot for reading such values. Unfortunately, there is not way to include `base. Bit` file into `BOOT.bin` according behaviour `petalinux-package --boot` [page 26 of UG1157] while FPGA MANAGER is enabled. Forums suggest just to disable such option without loosing driver support. Seems that PYNQ makefiles property `FPGA_MANAGER_Zybo: = 0` is relevant, but unfortunately it affects final device tree and includes `pynq_zocl_intc_zynq.dtsi` with `axi_intc_0: interrupt-controller@70000000` perverts Linux kernel from normal boot. If you know better solution pull-requests are welcome. 
+Zybo board requires I2C0 wires through PL for EEPROM access (ethernet MAC and audio codec ssm2603 control). That's why PL have to be configured during boot for reading such values. Unfortunately, there is not way to include `base.bit` file into `BOOT.bin` according behaviour `petalinux-package --boot` [page 26 of UG1157] while FPGA MANAGER is enabled. Forums suggest just to disable such option without loosing driver support. Seems that PYNQ makefiles property `FPGA_MANAGER_Zybo: = 0` is relevant, but unfortunately it affects final device tree and includes `pynq_zocl_intc_zynq.dtsi` with `axi_intc_0: interrupt-controller@70000000` perverts Linux kernel from normal boot. If you know better solution pull-requests are welcome. 
 
 Possibly custom U-BOOT script that flashing FPGA and storing the MAC address in env is a more elegant solution.
 
