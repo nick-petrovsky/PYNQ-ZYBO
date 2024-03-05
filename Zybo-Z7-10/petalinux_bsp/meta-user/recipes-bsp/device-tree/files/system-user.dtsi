@@ -58,10 +58,6 @@
 	};
 };
 
-&clkc {
-	ps-clk-frequency = <33333333>;
-};
-
 &gem0 {
 	status = "okay";
 	phy-mode = "rgmii-id";
@@ -74,8 +70,18 @@
 };
 
 &sdhci0 {
+	u-boot,dm-pre-reloc;
 	status = "okay";
 };
+
+/*
+&sdhci0 {
+	status = "okay";
+    max-frequency = <20000000>;
+    disable-wp;
+    no-1-8-v;
+};
+*/
 
 &uart1 {
 	status = "okay";
