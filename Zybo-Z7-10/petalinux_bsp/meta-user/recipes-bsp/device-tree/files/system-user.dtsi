@@ -74,14 +74,13 @@
 	status = "okay";
 };
 
-/*
-&sdhci0 {
-	status = "okay";
-    max-frequency = <20000000>;
-    disable-wp;
-    no-1-8-v;
+&qspi {
+	u-boot,dm-pre-reloc;
 };
-*/
+
+&flash0 {
+	compatible = "micron,m25p80", "s25fl128s", "spi-flash";
+};
 
 &uart1 {
 	status = "okay";
@@ -92,4 +91,15 @@
 	dr_mode = "host";
 	usb-phy = <&usb_phy0>;
 };
+
+/*
+&sdhci0 {
+	status = "okay";
+    max-frequency = <20000000>;
+    disable-wp;
+    no-1-8-v;
+};
+*/
+
+
 
