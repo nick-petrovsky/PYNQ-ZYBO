@@ -191,7 +191,7 @@ the_ROM_image:
 }
 ```
 
-After building the `BOOT.BIN` (Run command `bootgen -arch zynq -image bootgen.bif -w -o BOOT.BIN`), update it on the SD card.
+After building the `BOOT.BIN` (Run command `bootgen -arch zynq -image bootgen.bif -w -o BOOT.BIN`), update it on the SD card fat32 partition.
 
 ```bash
 $ rm /media/user/PYNQ/BOOT.BIN
@@ -214,6 +214,8 @@ It can't find the reason why PL have to be unconfigured while FPGA MANAGER is en
 
 ## Known issues
 
+11. [Optional] Patch HAVEGE systemd file.
+
 1. If HAVEGE service slowing down the boot process. Patch following options in systemd file `/lib/systemd/system/haveged.service`
 
 ```bash
@@ -228,7 +230,24 @@ $ sudo patch /lib/systemd/system/haveged.service << EOF
 EOF
 ```
 
-References:
-[1] - https://discuss.pynq.io/t/pynq-2-7-for-zybo-z7/4124
-[2] - https://support.xilinx.com/s/article/73296?language=en_US
-[3] - http://www.pynq.io/board.html
+## Deploy image
+
+12. Compress *.img file to save space and download time (SD Card flasher software *BalenaEtcher* support unpacking such archives on the fly)
+
+```bash
+$ xz -k -8e -T `nproc` -v ${HOME}/git-projects/PYNQ/sdbuild/output/Zybo-Z7-10-3.0.1.img
+```
+
+References
+-----
+
+- [PYNQ 2.7 forum for Zybo Z7]
+- [PetaLinux: How to install the required packages for the PetaLinux Build Host?]
+- [PYNQ porting guide]
+
+---
+
+[PYNQ 2.7 forum for Zybo Z7]: https://discuss.pynq.io/t/pynq-2-7-for-zybo-z7/4124
+[PetaLinux: How to install the required packages for the PetaLinux Build Host?]: https://support.xilinx.com/s/article/73296?language=en_US
+[PYNQ porting guide]: http://www.pynq.io/board.html
+
