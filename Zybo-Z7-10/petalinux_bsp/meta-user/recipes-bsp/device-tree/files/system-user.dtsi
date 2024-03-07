@@ -2,7 +2,7 @@
 
 /include/ "system-conf.dtsi"
 / {
-	model = "Digilent Zybo Z7 board (BSUIR EVS)";
+	model = "Digilent Zybo Z7-10 board (BSUIR EVS)";
 	compatible = "digilent,zynq-zybo-z7", "xlnx,zynq-7000";
 
 	aliases {
@@ -51,10 +51,12 @@
 		};
 	};
 
-	usb_phy0: phy0 {
+	usb_phy0: usb_phy@0 {
+		compatible = "ulpi-phy";
 		#phy-cells = <0>;
-		compatible = "usb-nop-xceiv";
-		reset-gpios = <&gpio0 46 GPIO_ACTIVE_LOW>;
+		reg = <0xe0002000 0x1000>;
+		view-port = <0x0170>;
+		drv-vbus;
 	};
 };
 
@@ -63,15 +65,26 @@
 	phy-mode = "rgmii-id";
 	phy-handle = <&ethernet_phy>;
 
-	ethernet_phy: ethernet-phy@0 {
-		reg = <0>;
+	ethernet_phy: ethernet-phy@1 {
+		reg = <1>;
 		device_type = "ethernet-phy";
 	};
+};
+
+&usb0 {	
+	dr_mode = "host";
+	usb-phy = <&usb_phy0>;
+	status = "okay";
 };
 
 &sdhci0 {
 	u-boot,dm-pre-reloc;
 	status = "okay";
+	/*
+    	max-frequency = <20000000>;
+    	disable-wp;
+    	no-1-8-v;
+	*/
 };
 
 &qspi {
@@ -85,21 +98,3 @@
 &uart1 {
 	status = "okay";
 };
-
-&usb0 {
-	status = "okay";
-	dr_mode = "host";
-	usb-phy = <&usb_phy0>;
-};
-
-/*
-&sdhci0 {
-	status = "okay";
-    max-frequency = <20000000>;
-    disable-wp;
-    no-1-8-v;
-};
-*/
-
-
-
