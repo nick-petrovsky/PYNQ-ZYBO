@@ -191,7 +191,7 @@ the_ROM_image:
 }
 ```
 
-After building the `BOOT.BIN`, update it on the SD card.
+After building the `BOOT.BIN` (Run command `bootgen -arch zynq -image bootgen.bif -w -o BOOT.BIN`), update it on the SD card.
 
 ```bash
 $ rm /media/user/PYNQ/BOOT.BIN
@@ -214,23 +214,18 @@ It can't find the reason why PL have to be unconfigured while FPGA MANAGER is en
 
 ## Known issues
 
-1. If HAVEGE service slowing down the boot process. Add following options to `/etc/default/haveged`
+1. If HAVEGE service slowing down the boot process. Patch following options in systemd file `/lib/systemd/system/haveged.service`
 
 ```bash
-# Configuration file for haveged
-
-# Options to pass to haveged:
-DAEMON_ARGS="-w 1024 -d16"
-```
-
-Patch following options in systemd file `/lib/systemd/system/haveged.service`
-
-```bash
--SystemCallFilter=@basic-io @file-system @io-event @network-io @signal
--SystemCallFilter=arch_prctl brk ioctl mprotect sysinfo
-+SystemCallFilter=@system-service
-+SystemCallFilter=~@mount
-+SystemCallErrorNumber=EPERM
+$ sudo patch /lib/systemd/system/haveged.service << EOF
+32,33c32,34
+< SystemCallFilter=@basic-io @file-system @io-event @network-io @signal
+< SystemCallFilter=arch_prctl brk ioctl mprotect sysinfo
+---
+> SystemCallFilter=@system-service
+> SystemCallFilter=~@mount
+> SystemCallErrorNumber=EPERM
+EOF
 ```
 
 References:
