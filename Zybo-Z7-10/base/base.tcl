@@ -1192,7 +1192,7 @@ proc create_root_design { parentCell } {
   set rgbleds_gpio [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 rgbleds_gpio ]
   set_property -dict [ list \
    CONFIG.C_ALL_OUTPUTS {1} \
-   CONFIG.C_GPIO_WIDTH {3} \
+   CONFIG.C_GPIO_WIDTH {6} \
  ] $rgbleds_gpio
 
   # Create instance: rst_ps7_0_fclk0, and set properties
