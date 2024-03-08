@@ -33,7 +33,7 @@ class BaseOverlay(pynq.Overlay):
             self.leds.setlength(4)
             self.switches.setlength(4)
             self.buttons.setlength(4)
-            self.rgbleds.setlength(6)
+            self.rgbleds.setlength(3)
             self.leds.setdirection("out")
             self.switches.setdirection("in")
             self.buttons.setdirection("in")

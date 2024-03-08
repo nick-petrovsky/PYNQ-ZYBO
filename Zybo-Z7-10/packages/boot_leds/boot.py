@@ -5,7 +5,7 @@ from pynq.overlays.base import BaseOverlay
 
 base = BaseOverlay("base.bit")
 
-rgbleds = [base.rgbleds[i] for i in range(4, 6)]
+rgbleds = [base.rgbleds[i] for i in range(3)]
 leds = [base.leds[i] for i in range(4)]
 
 # Toggle board LEDs leaving small LEDs lit
