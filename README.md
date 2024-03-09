@@ -10,7 +10,7 @@ Be carefull, there is exists atleast 3 majour versions of Zybo board:
 
 | Board | SoC part | Image | MD5 |
 | ------------- |:-------------:| :-----| :----- |
-| Retired Zybo (with VGA port) | `xc7z010clg400-1` | [Zybo-3.0.1-fix-boot-bin-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-3.0.1-fix-boot-bin-fix-havege.img.xz) | `f7fd9fbcd1dc035c02347687127a44d`  |
+| Retired Zybo (with VGA port) | `xc7z010clg400-1` | [Zybo-3.0.1-fix-boot-bin-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-3.0.1-fix-boot-bin-fix-havege.img.xz) | `ef7fd9fbcd1dc035c02347687127a44d`  |
 | Zybo-Z7-10 | `xc7z010clg400-1` | [Zybo-Z7-10-3.0.1-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-Z7-10-3.0.1-fix-havege.img.xz) | `35311dc43e11cdf091c199fd2c7a41fe` |
 | Zybo-Z7-20 (2 RGB leds and fan) | `xc7z020clg400-1` | TDB |
 
