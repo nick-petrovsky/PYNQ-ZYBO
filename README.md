@@ -1,27 +1,39 @@
-# PYNQ 3.0.1 for retaired Digilent Zybo  (2023 update)
+# PYNQ 3.0.1 for Digilent Zybo (2023 update)
 
-This repo provides an attempt to port PYNQ for the old Zybo board. Unlike other tutorials, this implementation provides a newer image v3.0.1 and the correct ethernet MAC address. I attempted to add complementary remarks and thoughts regarding installation of Xilinx tools on headless (i.e using a text-mode terminal only) Linux-based machine. 
+Inspired by the thread [PYNQ 2.7 forum for Zybo Z7], this repo provides an attempt to port PYNQ for the Zybo boards (including old ones). The goal of this project is quite minimalistic (no complicated overlays, only simple GPIO cores to demostrate that Linux & PYNQ tools are working as expected). Unlike other tutorials, this implementation provides support of newer software distribution (PYNQ v3.0.1) and the correct ethernet MAC address. I attempted to add complementary remarks and thoughts regarding installation of Xilinx tools on headless (i.e using a text-mode terminal only) Linux-based machine. 
+
+# Prebuild SD images
+
+[Lastest release](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/tag/v0.1.0)
+
+Be carefull, there is exists atleast 3 majour versions of Zybo board:
+
+| Board | SoC part | Image | MD5 |
+| ------------- |:----------------:| :-----| :----- |
+| Retired Zybo (with VGA port) | `xc7z010clg400-1` | [Zybo-3.0.1-fix-boot-bin-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-3.0.1-fix-boot-bin-fix-havege.img.xz) | `ef7fd9fbcd1dc035c02347687127a44d` |
+| Zybo-Z7-10 | `xc7z010clg400-1` | [Zybo-Z7-10-3.0.1-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-Z7-10-3.0.1-fix-havege.img.xz) | `35311dc43e11cdf091c199fd2c7a41fe` |
+| Zybo-Z7-20 (2 RGB leds and fan) **NOT TESTED** | `xc7z020clg400-1` | [Zybo-Z7-20-3.0.1-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-Z7-20-3.0.1-fix-havege.img.xz) | `b1500e51c65cd65e2eb2d25f555f9640`
+
+* (Retired Zybo) Fixed volatile ethernet MAC from I2C EEPROM (base bitstream is flashed on boot for I2C connectivity)
+* (All boards) Fixed HAVAGE daemon systemd service file (`/lib/systemd/system/haveged.service`)
+* (All boards) Simple Linux Device tree with MIO btns and leds
+
+The images are compressed with ZX archive. [BalenaEtcher](https://balenaetcher.org/) can be used for direct SD flashing without unpacking.
+
+Note: I don't have Zybo-Z7-20, according to the documentation it is similar to Zybo-Z7-10, please test and report.
+
+# Rebuild from scratch 
 
 ## Requrements
 
 * A ubuntu 20.04 machine or VM.
 * A storage partition with at least 300 GB of available data space.
 
-## Prebuild image
-
-[Lastest release](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/tag/v0.1.0)
-
-The image is compressed with ZX archive. [BalenaEtcher](https://balenaetcher.org/) can be used for direct SD flashing without unpacking.
-
-* Fixed volatile ethernet MAC (base bitstream is flashed on boot)
-* Fixed HAVAGE daemon systemd service file (/lib/systemd/system/haveged.service)
-* Simple Device tree with MIO btns and leds
-  
-## Install & build
+## Environment setup
 
 0. Install fresh VM with Ubuntu 20.04 server
 
-```bash
+```console
 $ lsb_release -a
 No LSB modules are available.
 Distributor ID: Ubuntu
@@ -32,14 +44,14 @@ Codename:       focal
 
 1. Copy or download Xilinx distributions (Vivado 2022.1 and Petalinux 2022.1)
 
-```bash
+```console
 $ cp /nfs/upload/Xilinx/petalinux-v2022.1-04191534-installer.run .
 $ cp /nfs/upload/Xilinx/Xilinx_Unified_2022.1_0420_0327.tar.gz .
 ```
 
 2. Reconfigure Dash to Bash
 
-```bash
+```console
 $ sudo dpkg-reconfigure dash
 ```
 
@@ -47,7 +59,7 @@ $ sudo dpkg-reconfigure dash
 
 Download PetaLinux environment configuration script: https://support.xilinx.com/s/article/73296?language=en_US
 
-```bash
+```console
 $ sudo dpkg --add-architexture i386
 $ chmod 755 ./plnx-env-setup.sh
 $ sudo ./plnx-env-setup.sh
@@ -65,7 +77,7 @@ $ ./petalinux-v2022.1-04191534-installer.run ./petalinux
 
 During configgen select *1.Vivado*
 
-```bash
+```console
 $ tar xvf Xilinx_Unified_2022.1_0420_0327.tar.gz
 $ cd Xilinx_Unified_2022.1_0420_0327
 $ sudo ./installLibs.sh
@@ -73,7 +85,7 @@ $ ./xsetup -b ConfigGen
 ```
 
 For non-gui setup switch off 'Shortcuts' and 'File associations' in `${HOME}/.Xilinx/install_config.txt`:
-```bash
+```console
 $ sed -i -e 's/CreateProgramGroupShortcuts=1/CreateProgramGroupShortcuts=0/g' \
 -e 's/CreateShortcutsForAllUsers=1/CreateShortcutsForAllUsers=0/g' \
 -e 's/CreateDesktopShortcuts=1/CreateDesktopShortcuts=0/g' \
@@ -83,7 +95,7 @@ ${HOME}/.Xilinx/install_config.txt
 
 Install Vivado in batch-mode
 
-```bash
+```console
 $ sudo ./xsetup --agree XilinxEULA,3rdPartyEULA -b Install -c /home/${HOME}/.Xilinx/install_config.txt
 ```
 
@@ -93,7 +105,7 @@ $ sudo ./xsetup --agree XilinxEULA,3rdPartyEULA -b Install -c /home/${HOME}/.Xil
 
 Clone PYNQ (https://pynq.readthedocs.io/en/latest/pynq_sd_card.html at this point we skip Vagrant)
 
-```bash
+```console
 $ mkdir ${HOME}/git-projects/
 $ cd ${HOME}/git-projects/
 $ git clone https://github.com/Xilinx/PYNQ.git
@@ -102,14 +114,14 @@ $ git clone https://github.com/nick-petrovsky/PYNQ-ZYBO.git
 
 At time of writing working PYNQ commit is `de6b6fc3`, 1 commit after `tag v3.0.1`
 
-```bash
+```console
 $ cd ${HOME}/git-projects/PYNQ
 $ git checkout de6b6fc3
 ```
 
-7. [Optional] Download prebuild images for speeding up the build process [3]
+7. [Optional] Download prebuild rootfs and software for speeding up the build process [3]
 
-```bash
+```console
 $ wget https://bit.ly/pynq_arm_v3_1 -O ${HOME}/git-projects/PYNQ/sdbuild/prebuilt/pynq_rootfs.arm.tar.gz
 $ wget https://bit.ly/pynq_sdist_v3_0_1 -O ${HOME}/git-projects/PYNQ/sdbuild/prebuilt/pynq_sdist.tar.gz
 $ ls -lah ${HOME}/git-projects/PYNQ/sdbuild/prebuilt/ 
@@ -127,14 +139,14 @@ $ md5sum ${HOME}/git-projects/PYNQ/sdbuild/prebuilt/pynq_sdist.tar.gz
 
 If you plan to build for ZynqMP boards also:
 
-```bash
+```console
 $ wget https://bit.ly/pynq_aarch64_v3_0_1 -O ${HOME}/git-projects/PYNQ/sdbuild/prebuilt/pynq_rootfs.aarch64.tar.gz
 ```
 
 8. Build PYNQ image and boot files for Zybo board 
 
 Setup build env:
-```bash
+```console
 $ source ${HOME}/petalinux/settings.sh
 $ source /tools/Xilinx/Vivado/2022.1/settings64.sh
 $ source /tools/Xilinx/Vitis/2022.1/settings64.sh
@@ -142,38 +154,38 @@ $ source /tools/Xilinx/Vitis/2022.1/settings64.sh
 
 Somewhy PYNQ referes `base.bit` file from `BOARDDIR` but do not build it automatically, so
 
-```bash
+```console
 $ cd ${HOME}/git-projects/PYNQ-ZYBO/Zybo
 $ make
 ```
 
-```bash
-$ cd ${HOME}/git-projects/PYNQ
+```console
+$ cd ${HOME}/git-projects/PYNQ/sdbuild/
 $ time make BOARDDIR=${HOME}/git-projects/PYNQ-ZYBO BOARDS=Zybo
 ```
 
 Successful build requires approximately 40 minutes with pre-existing dependencies on an 8-core machine.
 
 Usefull command if you plan to rebuild just kernel (approx 10 min):
-```bash
+```console
 $ time make boot_files BOARDDIR=${HOME}/git-projects/PYNQ-ZYBO BOARDS=Zybo
 ```
 
 9. Flash SD card according manual https://pynq.readthedocs.io/en/v3.0.0/appendix/sdcard.html#writing-the-sd-card
 
-```bash
+```console
 $ ls -lah ${HOME}/git-projects/PYNQ/sdbuild/output/Zybo-3.0.1.img
 ```
 
-10. [Optional] Volatile ethernet MAC address
+10. [Optional] Volatile ethernet MAC address (only for *old* Zybo board, for Zybo-Z7-10 and Zybo-Z7-20 you should avoid this step)
 
-Zybo board requires I2C0 wires through PL for EEPROM access (ethernet MAC and audio codec ssm2603 control). That's why PL have to be configured during boot for reading such values. Unfortunately, there is not way to include `base. Bit` file into `BOOT.bin` according behaviour `petalinux-package --boot` [page 26 of UG1157] while FPGA MANAGER is enabled. Forums suggest just to disable such option without loosing driver support. Seems that PYNQ makefiles property `FPGA_MANAGER_Zybo: = 0` is relevant, but unfortunately it affects final device tree and includes `pynq_zocl_intc_zynq.dtsi` with `axi_intc_0: interrupt-controller@70000000` perverts Linux kernel from normal boot. If you know better solution pull-requests are welcome. 
+Zybo board requires I2C0 wires through PL for EEPROM access (ethernet MAC and audio codec ssm2603 control). That's why PL have to be configured during boot for reading such values. Unfortunately, there is not way to include `base.bit` file into `BOOT.bin` according behaviour `petalinux-package --boot` [page 26 of UG1157] while FPGA MANAGER is enabled. Forums suggest just to disable such option without loosing driver support. Seems that PYNQ makefiles property `FPGA_MANAGER_Zybo: = 0` is relevant, but unfortunately it affects final device tree and includes `pynq_zocl_intc_zynq.dtsi` with `axi_intc_0: interrupt-controller@70000000` perverts Linux kernel from normal boot. If you know better solution pull-requests are welcome. 
 
 Possibly custom U-BOOT script that flashing FPGA and storing the MAC address in env is a more elegant solution.
 
 I have decided to repack `BOOT.BIN` as my current solution. 
 
-```bash
+```console
 $ mkdir ${HOME}/git-projects/boot
 $ cd ${HOME}/git-projects/boot
 $ cp ${HOME}/git-projects/PYNQ/sdbuild/build/Zybo/petalinux_project/images/linux/bootgen.bif .
@@ -191,16 +203,16 @@ the_ROM_image:
 }
 ```
 
-After building the `BOOT.BIN`, update it on the SD card.
+After building the `BOOT.BIN` (Run command `bootgen -arch zynq -image bootgen.bif -w -o BOOT.BIN`), update it on the SD card fat32 partition.
 
-```bash
+```console
 $ rm /media/user/PYNQ/BOOT.BIN
 $ cp ${HOME}/git-projects/boot/BOOT.BIN /media/user/PYNQ/BOOT.BIN
 ```
 
 Unmount media and test it under u-boot, where `00fa: 80 80 80 80 80 80    ......` will be MAC of specific board:
 
-```
+```console
 Zynq> i2c dev 0
 Setting bus to 0
 Zynq> i2c probe
@@ -212,28 +224,40 @@ Zynq>
 
 It can't find the reason why PL have to be unconfigured while FPGA MANAGER is enabled. Zybo is working without any problems in my situation and reconfiguring PL is also working.
 
-## Known issues
+11. [Optional] Patch HAVEGE systemd file.
 
-1. If HAVEGE service slowing down the boot process. Add following options to `/etc/default/haveged`
+If HAVEGE service slowing down the boot process. Patch following options in systemd file `/lib/systemd/system/haveged.service`
 
-```bash
-# Configuration file for haveged
-
-# Options to pass to haveged:
-DAEMON_ARGS="-w 1024 -d16"
+```console
+$ sudo patch /lib/systemd/system/haveged.service << EOF
+32,33c32,34
+< SystemCallFilter=@basic-io @file-system @io-event @network-io @signal
+< SystemCallFilter=arch_prctl brk ioctl mprotect sysinfo
+---
+> SystemCallFilter=@system-service
+> SystemCallFilter=~@mount
+> SystemCallErrorNumber=EPERM
+EOF
 ```
 
-Patch following options in systemd file `/lib/systemd/system/haveged.service`
+## Deploy image
 
-```bash
--SystemCallFilter=@basic-io @file-system @io-event @network-io @signal
--SystemCallFilter=arch_prctl brk ioctl mprotect sysinfo
-+SystemCallFilter=@system-service
-+SystemCallFilter=~@mount
-+SystemCallErrorNumber=EPERM
+12. Compress *.img file to save space and download time
+
+```console
+$ xz -k -8e -T `nproc` -v ${HOME}/git-projects/PYNQ/sdbuild/output/Zybo-Z7-10-3.0.1.img
 ```
 
-References:
-[1] - https://discuss.pynq.io/t/pynq-2-7-for-zybo-z7/4124
-[2] - https://support.xilinx.com/s/article/73296?language=en_US
-[3] - http://www.pynq.io/board.html
+References
+-----
+
+- [PYNQ 2.7 forum for Zybo Z7]
+- [PetaLinux: How to install the required packages for the PetaLinux Build Host?]
+- [PYNQ porting guide]
+
+---
+
+[PYNQ 2.7 forum for Zybo Z7]: https://discuss.pynq.io/t/pynq-2-7-for-zybo-z7/4124
+[PetaLinux: How to install the required packages for the PetaLinux Build Host?]: https://support.xilinx.com/s/article/73296?language=en_US
+[PYNQ porting guide]: http://www.pynq.io/board.html
+
