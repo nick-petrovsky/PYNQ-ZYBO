@@ -222,8 +222,6 @@ Zynq>
 
 It can't find the reason why PL have to be unconfigured while FPGA MANAGER is enabled. Zybo is working without any problems in my situation and reconfiguring PL is also working.
 
-## Known issues
-
 11. [Optional] Patch HAVEGE systemd file.
 
 If HAVEGE service slowing down the boot process. Patch following options in systemd file `/lib/systemd/system/haveged.service`

@@ -1,0 +1,153 @@
+diff --git a/board/xilinx/common/board.c b/board/xilinx/common/board.c
+index 203c4c772f..391b9dcb0a 100644
+--- a/board/xilinx/common/board.c
++++ b/board/xilinx/common/board.c
+@@ -11,8 +11,11 @@
+ #include <asm/sections.h>
+ #include <dm/uclass.h>
+ #include <i2c.h>
++#include <spi.h>
++#include <spi_flash.h>
+ #include <linux/sizes.h>
+ #include <malloc.h>
++#include "../../../drivers/mtd/spi/sf_internal.h"
+ #include "board.h"
+ #include <dm.h>
+ #include <i2c_eeprom.h>
+@@ -23,10 +26,10 @@
+ 
+ #include "fru.h"
+ 
+-#if defined(CONFIG_ZYNQ_GEM_I2C_MAC_OFFSET)
+ int zynq_board_read_rom_ethaddr(unsigned char *ethaddr)
+ {
+ 	int ret = -EINVAL;
++#if 0
+ 	struct udevice *dev;
+ 	ofnode eeprom;
+ 
+@@ -46,10 +49,95 @@ int zynq_board_read_rom_ethaddr(unsigned char *ethaddr)
+ 		debug("%s: I2C EEPROM MAC address read failed\n", __func__);
+ 	else
+ 		debug("%s: I2C EEPROM MAC %pM\n", __func__, ethaddr);
++#endif
++
++#if defined(CONFIG_ZYNQ_QSPI) && (defined(CONFIG_ZYNQ_GEM_SPI_MAC_OFFSET) || defined(CONFIG_ZYNQ_GEM_SPI_MAC_OTP))
++#if defined(CONFIG_ZYNQ_GEM_SPI_MAC_OTP)
++#define CMD_OTP_SPANSION_MICRON_READ_ARRAY_FAST 0x4b
++#define CMD_OTP_WINBOND_READ_ARRAY_FAST 0x48
++#define SPI_MAC_OFFSET_SPANSION_MICRON 0x20
++#define SPI_MAC_OFFSET_WINBOND 0x1000
++#define ID_S25FL128S 0x012018
++#define ID_MT25QL128ABA_N25Q128A 0x20BA18
++#define ID_W25Q128JV 0xEF7018
++#endif
++	u32 offset;
++	struct spi_flash *flash;
++	flash = spi_flash_probe(CONFIG_SF_DEFAULT_BUS,
++				CONFIG_SF_DEFAULT_CS,
++				CONFIG_SF_DEFAULT_SPEED,
++				CONFIG_SF_DEFAULT_MODE);
++	if (!flash) {
++		printf("SPI(bus:%u cs:%u) probe failed\n",
++			CONFIG_SF_DEFAULT_BUS,
++			CONFIG_SF_DEFAULT_CS);
++		return -ENODEV;
++	}
++
++	debug("%s: Flash Device ID: %02Xh %02Xh %02Xh\n", __func__,
++	  flash->info->id[0], flash->info->id[1], flash->info->id[2]);
++
++#if defined(CONFIG_ZYNQ_GEM_SPI_MAC_OFFSET)
++	debug("%s: Reading SPI MAC address from offset %08lxh\n", __func__,CONFIG_ZYNQ_GEM_SPI_MAC_OFFSET);
++	/*
++	 * Set the SPI MAC offset
++	 */
++	offset = CONFIG_ZYNQ_GEM_SPI_MAC_OFFSET;
++#endif
++
++#if defined(CONFIG_ZYNQ_GEM_SPI_MAC_OTP)
++	u32 id = ((u32)flash->info->id[0]<<16)|((u32)flash->info->id[1]<<8)|(u32)flash->info->id[2];
++	if (id == ID_S25FL128S) {
++		debug("%s: SPI Flash Spansion identified. Reading SPI MAC address from OTP area\n", __func__);
++		/*
++		 * Set the SPI MAC offset
++		 */
++		offset = SPI_MAC_OFFSET_SPANSION_MICRON;
++		/*
++		 * Set the cmd to otp read
++		 */
++		flash->read_opcode = CMD_OTP_SPANSION_MICRON_READ_ARRAY_FAST;
++	}
++	else if (id == ID_MT25QL128ABA_N25Q128A) {
++		debug("%s: SPI Flash Micron identified. Reading SPI MAC address from OTP area\n", __func__);
++		/*
++		 * Set the SPI MAC offset
++		 */
++		offset = SPI_MAC_OFFSET_SPANSION_MICRON;
++		/*
++		 * Set the cmd to otp read
++		 */
++		flash->read_opcode = CMD_OTP_SPANSION_MICRON_READ_ARRAY_FAST;
++	}
++	else if (id == ID_W25Q128JV) {
++		debug("%s: SPI Flash Winbond identified. Reading SPI MAC address from OTP area\n", __func__);
++		/*
++		 * Set the SPI MAC offset
++		 */
++		offset = SPI_MAC_OFFSET_WINBOND;
++		/*
++		 * Set the cmd to otp read
++		 */
++		flash->read_opcode = CMD_OTP_WINBOND_READ_ARRAY_FAST;
++	}
++	else {
++		printf("%s: Reading SPI MAC address from OTP area is not supported on this flash\n", __func__);
++		return -EINVAL;
++	}
++#endif
++
++	ret = spi_flash_read(flash, offset, 6, ethaddr);
++	if (ret)
++		debug("%s: SPI MAC address read failed\n", __func__);
++	else
++		debug("%s: SPI MAC address: %pM\n", __func__, ethaddr);
+ 
++	if (flash)
++		spi_flash_free(flash);
++#endif
++	
+ 	return ret;
+ }
+-#endif
+ 
+ #define EEPROM_HEADER_MAGIC		0xdaaddeed
+ #define EEPROM_HDR_MANUFACTURER_LEN	16
+diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+index c1a49173c2..0dccf24f6f 100644
+--- a/drivers/net/Kconfig
++++ b/drivers/net/Kconfig
+@@ -651,6 +651,23 @@ config ZYNQ_GEM
+ 	help
+ 	  This MAC is present in Xilinx Zynq and ZynqMP SoCs.
+ 
++config ZYNQ_GEM_SPI_MAC_OTP
++	depends on ZYNQ_GEM 
++	bool "Read MAC address from flash OTP AREA"
++	help
++	  Enable this option if your MAC address is saved in flash OTP area.
++	  The MAC offset is automatically selected depending on the flash type.
++
++if !ZYNQ_GEM_SPI_MAC_OTP
++
++config ZYNQ_GEM_SPI_MAC_OFFSET
++	depends on ZYNQ_GEM 
++ 	hex "Xilinx MAC QSPI offset"
++	help
++	  Set the offset where the MAC address is saved in flash memory array.
++ 
++endif # ZYNQ_GEM_SPI_MAC_OTP
++
+ config PIC32_ETH
+ 	bool "Microchip PIC32 Ethernet Support"
+ 	depends on DM_ETH && MACH_PIC32
