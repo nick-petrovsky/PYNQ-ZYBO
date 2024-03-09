@@ -22,14 +22,14 @@ set_property -dict { PACKAGE_PIN D18   IOSTANDARD LVCMOS33 } [get_ports { leds_4
 
 
 ##RGB LED 5 (Zybo Z7-20 only)
-set_property -dict { PACKAGE_PIN Y11   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[0] }]; #IO_L18N_T2_13 Sch=led5_r
-set_property -dict { PACKAGE_PIN T5    IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[1] }]; #IO_L19P_T3_13 Sch=led5_g
-set_property -dict { PACKAGE_PIN Y12   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[2] }]; #IO_L20P_T3_13 Sch=led5_b
+#set_property -dict { PACKAGE_PIN Y11   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[0] }]; #IO_L18N_T2_13 Sch=led5_r
+#set_property -dict { PACKAGE_PIN T5    IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[1] }]; #IO_L19P_T3_13 Sch=led5_g
+#set_property -dict { PACKAGE_PIN Y12   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[2] }]; #IO_L20P_T3_13 Sch=led5_b
 
 ##RGB LED 6
-set_property -dict { PACKAGE_PIN V16   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[3] }]; #IO_L18P_T2_34 Sch=led6_r
-set_property -dict { PACKAGE_PIN F17   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[4] }]; #IO_L6N_T0_VREF_35 Sch=led6_g
-set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[5] }]; #IO_L8P_T1_AD10P_35 Sch=led6_b
+set_property -dict { PACKAGE_PIN V16   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[0] }]; #IO_L18P_T2_34 Sch=led6_r
+set_property -dict { PACKAGE_PIN F17   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[1] }]; #IO_L6N_T0_VREF_35 Sch=led6_g
+set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports { rgbleds_6bits_tri_o[2] }]; #IO_L8P_T1_AD10P_35 Sch=led6_b
 
 ##Additional Ethernet signals
 #set_property -dict { PACKAGE_PIN F16   IOSTANDARD LVCMOS33  PULLUP true    } [get_ports { eth_int_pu_b }]; #IO_L6P_T0_35 Sch=eth_int_pu_b
