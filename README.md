@@ -261,3 +261,17 @@ References
 [PetaLinux: How to install the required packages for the PetaLinux Build Host?]: https://support.xilinx.com/s/article/73296?language=en_US
 [PYNQ porting guide]: http://www.pynq.io/board.html
 
+Alternatives
+-----
+
+- [gabrielpgagne/PYNQ 3.0.1 for Zybo-Z7-20]
+- [dorfell/Pynq 2.7 for Zybo-Z7]
+- [altuSemi/PYNQ4Zybo]
+- [ussamazahid96/ZYBO-PYNQ]
+
+---
+
+[gabrielpgagne/PYNQ 3.0.1 for Zybo-Z7-20]: https://github.com/gabrielpgagne/pynq-zybo-z720
+[dorfell/Pynq 2.7 for Zybo-Z7]: https://gitlab.com/dorfell/fer_sys_dev/-/tree/master/01_hw/Pynq_Zybo-Z7
+[altuSemi/PYNQ4Zybo]: https://github.com/altuSemi/PYNQ4Zybo
+[ussamazahid96/ZYBO-PYNQ]: https://github.com/ussamazahid96/ZYBO-PYNQ
