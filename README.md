@@ -12,15 +12,13 @@ Be carefull, there is exists atleast 3 majour versions of Zybo board:
 | ------------- |:----------------:| :-----| :----- |
 | Retired Zybo (with VGA port) | `xc7z010clg400-1` | [Zybo-3.0.1-fix-boot-bin-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-3.0.1-fix-boot-bin-fix-havege.img.xz) | `ef7fd9fbcd1dc035c02347687127a44d` |
 | Zybo-Z7-10 | `xc7z010clg400-1` | [Zybo-Z7-10-3.0.1-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-Z7-10-3.0.1-fix-havege.img.xz) | `35311dc43e11cdf091c199fd2c7a41fe` |
-| Zybo-Z7-20 (2 RGB leds and fan) **NOT TESTED** | `xc7z020clg400-1` | [Zybo-Z7-20-3.0.1-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-Z7-20-3.0.1-fix-havege.img.xz) | `b1500e51c65cd65e2eb2d25f555f9640`
+| Zybo-Z7-20 (2 RGB leds and fan) | `xc7z020clg400-1` | [Zybo-Z7-20-3.0.1-fix-havege.img.xz](https://github.com/nick-petrovsky/PYNQ-ZYBO/releases/download/v0.1.0/Zybo-Z7-20-3.0.1-fix-havege.img.xz) | `b1500e51c65cd65e2eb2d25f555f9640`
 
 * (Retired Zybo) Fixed volatile ethernet MAC from I2C EEPROM (base bitstream is flashed on boot for I2C connectivity)
 * (All boards) Fixed HAVAGE daemon systemd service file (`/lib/systemd/system/haveged.service`)
 * (All boards) Simple Linux Device tree with MIO btns and leds
 
 The images are compressed with ZX archive. [BalenaEtcher](https://balenaetcher.org/) can be used for direct SD flashing without unpacking.
-
-Note: I don't have Zybo-Z7-20, according to the documentation it is similar to Zybo-Z7-10, please test and report.
 
 # Rebuild from scratch 
 
