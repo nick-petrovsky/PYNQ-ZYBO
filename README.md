@@ -246,6 +246,10 @@ EOF
 $ xz -k -8e -T `nproc` -v ${HOME}/git-projects/PYNQ/sdbuild/output/Zybo-Z7-10-3.0.1.img
 ```
 
+Contributing
+-----
+Contributions to this repository are welcome. If you find any issues or have suggestions for improvements, please feel free to submit a pull request.
+
 References
 -----
 
