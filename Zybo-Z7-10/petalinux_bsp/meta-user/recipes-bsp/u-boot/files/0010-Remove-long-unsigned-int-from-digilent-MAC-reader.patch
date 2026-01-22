@@ -1,0 +1,25 @@
+From f26b2f81232cdfd5f1d59b36b8f62eee9c9ca86f Mon Sep 17 00:00:00 2001
+From: Nick Petrovsky <nick@petrovsky.eu>
+Date: Tue, 9 Dec 2025 16:41:05 +0300
+Subject: [PATCH 10/10] Remove long unsigned int from digilent MAC reader.
+
+---
+ board/digilent/common/eth_mac_from_qspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/digilent/common/eth_mac_from_qspi.c b/board/digilent/common/eth_mac_from_qspi.c
+index d92faf66745..15ec2772401 100644
+--- a/board/digilent/common/eth_mac_from_qspi.c
++++ b/board/digilent/common/eth_mac_from_qspi.c
+@@ -43,7 +43,7 @@ int zynq_board_read_rom_ethaddr(unsigned char *ethaddr)
+ 	flash->read_opcode = CMD_OTP_READ_ARRAY_FAST;
+ #endif
+ 
+-	printf("%s: Reading SPI MAC address from offset %08lxh\n", __func__,
++	printf("%s: Reading SPI MAC address from offset %08xh\n", __func__,
+ 	       CONFIG_ZYNQ_GEM_MAC_QSPI_OFFSET);
+ 
+ 	offset = CONFIG_ZYNQ_GEM_MAC_QSPI_OFFSET;
+-- 
+2.43.0
+

@@ -1,5 +1,10 @@
 SRC_URI:append = " file://platform-top.h"
-SRC_URI += " file://0001-alow-to-read-mac-address-from-SPI-flash-OTP.patch"
 SRC_URI += " file://ethernet_spi.cfg"
+SRC_URI += " file://0005-digilent-net-Add-entry-point-for-setting-zynq_get-MA.patch"
+SRC_URI += " file://0006-digilent-net-Set-QSPI-read-settings-via-Kconfig.patch"
+SRC_URI += " file://0007-digilent-net-Set-MAC-address-from-QPSI-flash.patch"
+SRC_URI += " file://0008-digilent-net-Set-Kconfig-defaults-for-ZYNQ_GEM_MAC_Q.patch"
+SRC_URI += " file://0009-digilent-net-Read-MAC-address-from-OTP-section-of-QS.patch"
+SRC_URI += " file://0010-Remove-long-unsigned-int-from-digilent-MAC-reader.patch"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
