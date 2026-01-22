@@ -6,10 +6,10 @@ import pynq
 import pynq.lib
 
 class BaseOverlay(pynq.Overlay):
-    """ The Base overlay for the Pynq-Z1
+    """ The Base overlay for the Zybo-Z7-10
 
-    This overlay is designed to interact with all of the on board peripherals
-    and external interfaces of the Pynq-Z1 board. It exposes the following
+    This overlay is designed to interact with basic of the on board peripherals
+    and external interfaces of the Zybo-Z7-10 board. It exposes the following
     attributes:
 
     Attributes
