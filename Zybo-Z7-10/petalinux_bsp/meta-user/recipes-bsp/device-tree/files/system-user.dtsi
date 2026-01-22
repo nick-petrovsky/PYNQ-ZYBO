@@ -78,17 +78,12 @@
 };
 
 &sdhci0 {
-	u-boot,dm-pre-reloc;
+	bootph-all;
 	status = "okay";
-	/*
-    	max-frequency = <20000000>;
-    	disable-wp;
-    	no-1-8-v;
-	*/
 };
 
 &qspi {
-	u-boot,dm-pre-reloc;
+	bootph-all;
 };
 
 &flash0 {
