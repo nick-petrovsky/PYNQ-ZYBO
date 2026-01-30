@@ -2,7 +2,7 @@
 
 /include/ "system-conf.dtsi"
 / {
-	model = "Digilent Zybo Z7-10 board (BSUIR EVS)";
+	model = "Digilent Zybo Z7-10 board (BSUIR VVS)";
 	compatible = "digilent,zynq-zybo-z7", "xlnx,zynq-7000";
 
 	aliases {
@@ -35,6 +35,8 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 		autorepeat;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_key_default>;
 		btn4 {
 			label = "btn4";
 			gpios = <&gpio0 50 0>;
@@ -92,4 +94,24 @@
 
 &uart1 {
 	status = "okay";
+};
+
+&pinctrl0 {
+	/omit-if-no-ref/ pinctrl_key_default: key-default {
+        mux {
+            groups = "gpio0_50_grp", "gpio0_51_grp";
+            function = "gpio0";
+        };
+
+        conf {
+            pins = "MIO50", "MIO51";
+            io-standard = <1>;
+            bias-high-impedance;
+            slew-rate = <0>;
+        };
+    };
+};
+
+&gpio0 {
+    status = "okay";
 };
